@@ -1,34 +1,17 @@
 /* @flow */
 
 import Hapi from 'hapi';
-import Good from 'good';
+import routes from './Handlers';
+import plugins from './Plugins';
+import mongoose from 'mongoose';
 
-const server = new Hapi.server({
-  port: 3001,
+const server = new Hapi.Server({
+  port: 3001
 });
 
-const options = {
-  reporters: {
-    myConsoleReporter: [
-      {
-        module: 'good-squeeze',
-        name: 'Squeeze',
-        args: [{ log: '*', response: '*' }],
-      },
-      {
-        module: 'good-console',
-      },
-      'stdout',
-    ],
-  },
-};
-
-async function start() {
+async function start () {
   try {
-    await server.register({
-      plugin: Good,
-      options,
-    });
+    await server.register(plugins);
 
     await server.start();
   } catch (error) {
@@ -37,13 +20,14 @@ async function start() {
   }
 }
 
-server.route({
-  method: 'GET',
-  path: '/name/{name}',
-  handler: function(request) {
-    const name = request.params.name;
-    return `Hello  ${name}`;
-  },
-});
+server.route(routes);
 
 start();
+
+mongoose.connect('mongodb://fuck:you@ds161136.mlab.com:61136/reservations')
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  console.log('tits')
+})

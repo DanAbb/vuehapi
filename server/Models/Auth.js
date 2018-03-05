@@ -1,12 +1,18 @@
 /* @flow */
 
 import mongoose, { Schema } from 'mongoose'
+import shortid from 'shortid'
 
 const authSchema = new Schema({
-  email: String,
-  hPassword: String,
+  email: { type: String, index: true },
+  hashedPassword: String,
   emailVerified: { type: Boolean, default: false },
-  creationDate: { type: Date, default: Date.now }
+  emailVerifiedKey: { type: String, default: shortid.generate() },
+  creationDate: { type: Date, default: Date.now },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 const Auth = mongoose.model('Auth', authSchema)

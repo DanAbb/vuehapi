@@ -1,24 +1,42 @@
-/* @flow */
-
+import bcrypt from 'bcrypt'
 import { Auth, User } from '../../Models'
+import { VerifyEmail } from '../../Services'
 
-export default function (request: Object): Object {
-  async function userAuth () {
+export default async function (request, h) {
+  const { firstName, lastName, email, hashedPassword } = request.payload
+
+  if (!firstName || !lastName || !email || !hashedPassword) {
+    return h.response({ message: "Malformed request" }).code(400)
+  }
+
+  try {
+    if (await Auth.findOne({ email })) {
+      return h.response({ message: 'User already exists' }).code(409)
+    }
+
     const user = new User({
-      firstName: 'Dan',
-      lastName: 'Abbott'
+      firstName,
+      lastName
     })
 
+    await user.save()
+
+    const saltRounds = 8
+    const hashPass = await bcrypt.hash(hashedPassword, saltRounds)
+
     const auth = new Auth({
-      email: 'dan@dabb.io',
-      hPassword: 'fucku'
+      email,
+      hashedPassword: hashPass,
+      user
     })
 
     await auth.save()
-    const x = await user.save()
+    await VerifyEmail(email, auth.emailVerifiedKey)
 
-    return x
+    return auth
+
+  } catch (error) {
+    console.log(error)
+    return h.response({ errorMessage: error.message }).code(500)
   }
-
-  return userAuth()
 }

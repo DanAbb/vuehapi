@@ -2,6 +2,7 @@
 
 import CheckUsernameAvailability from './CheckUsernameAvailability';
 import ManualSignup from './ManualSignup';
+import Joi from 'joi'
 
 const routes = [
   {
@@ -10,9 +11,22 @@ const routes = [
     handler: CheckUsernameAvailability
   },
   {
-    method: 'GET',
+    method: 'POST',
     path: '/Signup/ManualSignup',
-    handler: ManualSignup
+    handler: ManualSignup,
+    config: {
+      tags: ['api'], // THIS IS FOR HAPISWAGGER
+      validate: {
+        payload: {
+          firstName: Joi.string().required(),
+          lastName: Joi.string().required(),
+          email: Joi.string().email().required(),
+          hashedPassword: Joi.string()
+            .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
+            .required()
+        }
+      }
+    }
   }
 ];
 

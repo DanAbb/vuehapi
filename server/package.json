@@ -32,9 +32,12 @@
     "bcrypt": "^1.0.3",
     "console-stamp": "^0.2.6",
     "hapi": "^17.2.1",
+    "hapi-auth-bearer-token": "^6.0.1",
+    "hapi-auth-jwt2": "^8.0.0",
     "hapi-swagger": "^9.1.1",
     "inert": "^5.1.0",
     "joi": "^13.1.2",
+    "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.7",
     "shortid": "^2.2.8",
     "vision": "^5.3.1"

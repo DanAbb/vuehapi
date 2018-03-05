@@ -5,6 +5,10 @@ import routes from './Handlers';
 import plugins from './Plugins';
 import mongoose from 'mongoose';
 import consoleTime from 'console-stamp'
+import jwt from 'jsonwebtoken'
+import { Auth } from './Models'
+import { readFileSync } from 'fs';
+import path from 'path';
 
 consoleTime(console, {
   pattern: 'dd/mm/yyyy HH:MM:ss.l',
@@ -21,19 +25,38 @@ const server = new Hapi.Server({
   port: 3001
 });
 
-async function start () {
-  try {
-    await server.register(plugins);
-    await server.start();
-  } catch (error) {
-    console.log(error);
-    process.exit(1);
+const validate = async function (decoded, request) {
+  if (decoded.user) {
+    return { isValid: true, credentials: decoded.user }
+  } else {
+    return { isValid: false }
   }
 }
 
-server.route(routes);
+async function start () {
+  try {
+    await server.register(plugins)
 
-start();
+    const publicCert = readFileSync(path.resolve(__dirname, './public.pem'))
+
+    server.auth.strategy('jwt', 'jwt', {
+      key: publicCert,
+      validate,
+      verifyOptions: { algorithm: ['RS256']}
+    })
+
+    server.auth.default('jwt')
+
+    await server.start()
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
+  }
+}
+
+server.route(routes)
+
+start()
 
 const mongoUser = process.env.MONGO_USER || 'user'
 const mongoPassword = process.env.MONGO_PASSWORD || 'pass'

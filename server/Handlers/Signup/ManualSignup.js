@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import { Auth, User } from '../../Models'
 import { VerifyEmail } from '../../Services'
+import CheckUsernameAvailability from './CheckUsernameAvailability'
 
 export default async function (request, h) {
   const { firstName, lastName, email, hashedPassword } = request.payload

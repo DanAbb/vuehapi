@@ -1,18 +1,37 @@
-/* @flow */
-
+import Joi from 'joi'
 import ManualLogin from './ManualLogin';
 import VerifyEmail from './VerifyEmail';
 
 const routes = [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/Login/ManualLogin',
-    handler: ManualLogin
+    handler: ManualLogin,
+    config: {
+      auth: false,
+      tags: ['api'],
+      validate: {
+        payload: {
+          email: Joi.string().email().required(),
+          password: Joi.string(),
+          refreshToken: Joi.string()
+        }
+      }
+    }
   },
   {
     method: 'GET',
     path: '/Login/VerifyEmail',
-    handler: VerifyEmail
+    handler: VerifyEmail,
+    config: {
+      tags: ['api'],
+      validate: {
+        query: {
+          email: Joi.string().email().required(),
+          key: Joi.string().required()
+        }
+      }
+    }
   }
 ];
 

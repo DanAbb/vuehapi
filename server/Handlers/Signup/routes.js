@@ -1,14 +1,36 @@
 /* @flow */
 
 import CheckUsernameAvailability from './CheckUsernameAvailability';
+import SendNewVerifyEmail from './SendNewVerifyEmail'
 import ManualSignup from './ManualSignup';
 import Joi from 'joi'
 
 const routes = [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/Signup/CheckUsernameAvailability',
-    handler: CheckUsernameAvailability
+    handler: CheckUsernameAvailability,
+    config: {
+      tags: ['api'],
+      validate: {
+        payload: {
+          email: Joi.string().email().required()
+        }
+      }
+    }
+  },
+  {
+    method: 'PUT',
+    path: '/Signup/SendNewVerifyEmail',
+    handler: SendNewVerifyEmail,
+    config: {
+      tags: ['api'],
+      validate: {
+        payload: {
+          email: Joi.string().email().required()
+        }
+      }
+    }
   },
   {
     method: 'POST',

@@ -7,8 +7,9 @@ const authSchema = new Schema({
   email: { type: String, index: true },
   hashedPassword: String,
   emailVerified: { type: Boolean, default: false },
-  emailVerifiedKey: { type: String, default: shortid.generate() },
+  emailVerifiedKey: { type: String, default: shortid.generate },
   creationDate: { type: Date, default: Date.now },
+  refreshTokens: [String],
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User'

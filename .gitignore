@@ -14,3 +14,4 @@ yarn-error.log*
 *.sln
 *.key
 *.pem
+.env

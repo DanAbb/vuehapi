@@ -42,7 +42,7 @@ async function start () {
     server.auth.strategy('jwt', 'jwt', {
       key: publicCert,
       validate,
-      verifyOptions: { algorithm: ['RS256']}
+      verifyOptions: { algorithm: ['RS256'] }
     })
 
     server.auth.default('jwt')

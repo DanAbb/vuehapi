@@ -34,7 +34,6 @@ export default async function (request, h) {
     }
   }
 
-
   if (isValid) {
     const refreshToken = uuid()
     const user = auth.user

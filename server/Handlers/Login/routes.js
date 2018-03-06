@@ -9,6 +9,7 @@ const routes = [
     handler: ManualLogin,
     config: {
       auth: false,
+      cors: true,
       tags: ['api'],
       validate: {
         payload: {

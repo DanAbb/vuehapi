@@ -1,0 +1,22 @@
+html,
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid black;
+  padding-bottom: 1px;
+  transition: all .1s ease-in-out;
+
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid black;
+    padding-bottom: 0;
+  }
+
+  &[type="submit"] {
+    cursor: pointer;
+    border-bottom: none;
+  }
+}

@@ -9,13 +9,14 @@
       <input type="password" name="password" v-model="password">
     </div>
     <div class="input-container">
-      <input type="submit" value="Submit" @click="submit($event)">
+      <input type="submit" value="Submit" @click="submit()">
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import api from '../services/api'
+import CookieStorage from '../services/cookie.storage.js'
 
 export default {
   data () {
@@ -25,21 +26,21 @@ export default {
     }
   },
   methods: {
-    async submit (ev) {
-      ev.preventDefault()
-      try {
-        const login = await axios({
-          method: 'post',
-          url: 'http://localhost:3001/Login/ManualLogin',
-          data: {
-            email: this.email,
-            password: this.password
-          }
-        })
+    async submit () {
+      const data = {
+        email: this.email,
+        password: this.password
+      }
 
-        console.log(login)
-      } catch (error) {
-        console.log(error)
+      const login = await api('post', 'Login/ManualLogin', data)
+
+      console.log(login)
+
+      if (login) {
+        CookieStorage.setUserId(login.data.user._id)
+        CookieStorage.setAuthToken(login.data.authToken)
+        CookieStorage.setRefreshToken(login.data.authToken)
+        this.$router.push({ name: 'Dashboard' })
       }
     }
   }
@@ -60,10 +61,10 @@ export default {
 
   .input-container {
     margin: 10px;
-    width: 240px;
+    width: 340px;
 
     input {
-      width: 200px;
+      width: 300px;
       height: 50px;
       font-size: 20px;
     }

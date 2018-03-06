@@ -25,6 +25,7 @@ const routes = [
     path: '/Login/VerifyEmail',
     handler: VerifyEmail,
     config: {
+      cors: true,
       tags: ['api'],
       validate: {
         query: {

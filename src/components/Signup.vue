@@ -1,5 +1,13 @@
 <template>
-  <div class="login-wrapper">
+  <div class="signup-wrapper">
+    <div class="input-container">
+      <label for="firstName">First Name</label>
+      <input type="firstName" name="firstName" v-model="firstName">
+    </div>
+    <div class="input-container">
+      <label for="lastName">Last Name</label>
+      <input type="lastName" name="lastName" v-model="lastName">
+    </div>
     <div class="input-container">
       <label for="email">Email</label>
       <input type="email" name="email" v-model="email">
@@ -16,11 +24,12 @@
 
 <script>
 import api from '../services/api'
-import CookieStorage from '../services/cookie.storage.js'
 
 export default {
   data () {
     return {
+      firstName: '',
+      lastName: '',
       email: '',
       password: ''
     }
@@ -28,17 +37,18 @@ export default {
   methods: {
     async submit () {
       const data = {
+        firstName: this.firstName,
+        lastName: this.lastName,
         email: this.email,
-        password: this.password
+        hashedPassword: this.password
       }
 
-      const login = await api('post', 'Login/ManualLogin', data)
+      const signup = await api('post', 'Signup/ManualSignup', data)
 
-      if (login) {
-        CookieStorage.setUserId(login.data.user._id)
-        CookieStorage.setAuthToken(login.data.authToken)
-        CookieStorage.setRefreshToken(login.data.authToken)
-        this.$router.push({ name: 'Dashboard' })
+      console.log(signup)
+
+      if (signup.status === 200) {
+        this.$router.push({ name: 'Login' })
       }
     }
   }
@@ -48,7 +58,7 @@ export default {
 <style lang="scss" scoped>
   @import '~styles/global.scss';
 
-  .login-wrapper {
+  .signup-wrapper {
     height: 100vh;
     width: 100vw;
     display: flex;

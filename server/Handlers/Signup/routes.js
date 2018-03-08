@@ -11,6 +11,8 @@ const routes = [
     path: '/Signup/CheckUsernameAvailability',
     handler: CheckUsernameAvailability,
     config: {
+      auth: false,
+      cors: true,
       tags: ['api'],
       validate: {
         payload: {
@@ -24,6 +26,7 @@ const routes = [
     path: '/Signup/SendNewVerifyEmail',
     handler: SendNewVerifyEmail,
     config: {
+      cors: true,
       tags: ['api'],
       validate: {
         payload: {
@@ -37,6 +40,8 @@ const routes = [
     path: '/Signup/ManualSignup',
     handler: ManualSignup,
     config: {
+      auth: false,
+      cors: true,
       tags: ['api'], // THIS IS FOR HAPISWAGGER
       validate: {
         payload: {

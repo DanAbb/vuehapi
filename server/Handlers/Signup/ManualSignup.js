@@ -1,13 +1,12 @@
 import bcrypt from 'bcrypt'
 import { Auth, User } from '../../Models'
 import { VerifyEmail } from '../../Services'
-import CheckUsernameAvailability from './CheckUsernameAvailability'
 
 export default async function (request, h) {
   const { firstName, lastName, email, hashedPassword } = request.payload
 
   if (!firstName || !lastName || !email || !hashedPassword) {
-    return h.response({ message: "Malformed request" }).code(400)
+    return h.response({ message: 'Malformed request' }).code(400)
   }
 
   try {
@@ -35,7 +34,6 @@ export default async function (request, h) {
     await VerifyEmail(email, auth.emailVerifiedKey)
 
     return auth
-
   } catch (error) {
     console.log(error)
     return h.response({ errorMessage: error.message }).code(500)

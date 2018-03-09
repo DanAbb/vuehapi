@@ -5,8 +5,6 @@ import routes from './Handlers';
 import plugins from './Plugins';
 import mongoose from 'mongoose';
 import consoleTime from 'console-stamp'
-import jwt from 'jsonwebtoken'
-import { Auth } from './Models'
 import { readFileSync } from 'fs';
 import path from 'path';
 

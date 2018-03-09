@@ -1,6 +1,5 @@
 import { Auth } from '../../Models'
 import bcrypt from 'bcrypt'
-import shortid from 'shortid'
 import jwt from 'jsonwebtoken'
 import uuid from 'uuid/v4'
 import { readFileSync } from 'fs';

@@ -1,9 +1,9 @@
 import axios from 'axios'
 import CookieStorage from './cookie.storage'
 
-export default async function (method, endpoint, data = {}) {
-  const host = 'http://localhost:3001'
+const host = 'http://localhost:3001'
 
+export async function api (method, endpoint, data = {}) {
   try {
     const result = await axios({
       method,
@@ -18,11 +18,46 @@ export default async function (method, endpoint, data = {}) {
   } catch (error) {
     if (error.response) {
       if (error.response.status === 401) {
-        return 'unauthorized'
+        const refreshToken = CookieStorage.getRefreshToken()
+        const userId = CookieStorage.getUserId()
+        const login = await fetchNewToken(refreshToken, userId)
+
+        if (!login) {
+          return false
+        }
+
+        try {
+          const result = await api(method, endpoint, data)
+          return result
+        } catch (error) {
+          return 'no good mate'
+        }
       } else {
         return error.response.data
       }
     }
     return error
+  }
+}
+
+async function fetchNewToken (rt, id) {
+  console.info('Trying refresh token')
+  try {
+    const login = await axios({
+      method: 'post',
+      url: `${host}/Login/ManualLogin`,
+      data: {
+        user: id,
+        refreshToken: rt
+      }
+    })
+
+    CookieStorage.setAuthToken(login.data.authToken)
+    CookieStorage.setRefreshToken(login.data.refreshToken)
+
+    return login
+  } catch (error) {
+    console.info('Refresh token failed. Please login again')
+    return false
   }
 }

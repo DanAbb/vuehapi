@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import api from '../services/api'
-import CookieStorage from '../services/cookie.storage.js'
+import { api } from 'services/api'
+import CookieStorage from 'services/cookie.storage.js'
 
 export default {
   data () {
@@ -32,13 +32,14 @@ export default {
         password: this.password
       }
 
-      const login = await api('post', 'Login/ManualLogin', data)
-
-      if (login) {
+      try {
+        const login = await api('post', 'Login/ManualLogin', data)
         CookieStorage.setUserId(login.data.user._id)
         CookieStorage.setAuthToken(login.data.authToken)
-        CookieStorage.setRefreshToken(login.data.authToken)
-        this.$router.push({ name: 'Dashboard' })
+        CookieStorage.setRefreshToken(login.data.refreshToken)
+        this.$router.push({ name: 'AllRestaurants' })
+      } catch (error) {
+        console.log(error)
       }
     }
   }

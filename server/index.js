@@ -21,7 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const server = new Hapi.Server({
   port: 3001
-});
+})
 
 const validate = async function (decoded, request) {
   if (decoded.user) {

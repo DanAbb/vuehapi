@@ -7,6 +7,7 @@ import state from './state'
 import mutations from './mutations'
 
 import dashboard from './modules/dashboard'
+import restaurant from './modules/restaurant'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
   getters,
   mutations,
   modules: {
-    dashboard
+    dashboard,
+    restaurant
   }
 })

@@ -3,6 +3,9 @@ import Router from 'vue-router'
 const Login = (r) => require(['@/components/Login'], r)
 const Signup = (r) => require(['@/components/Signup'], r)
 const Dashboard = (r) => require(['@/components/Dashboard'], r)
+const AllRestaurants = (r) => require(['@/components/restaurants/AllRestaurants'], r)
+const NewRestaurant = (r) => require(['@/components/restaurants/NewRestaurant'], r)
+const Restaurant = (r) => require(['@/components/restaurants/Restaurant'], r)
 
 Vue.use(Router)
 
@@ -22,7 +25,25 @@ export default new Router({
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      children: [
+        {
+          path: '/myrestaurants',
+          name: 'AllRestaurants',
+          component: AllRestaurants
+        },
+        {
+          path: '/newrestaurant',
+          name: 'NewRestaurant',
+          component: NewRestaurant
+        },
+        {
+          path: '/restaurant/:id',
+          name: 'Restaurant',
+          component: Restaurant,
+          props: true
+        }
+      ]
     }
   ]
 })

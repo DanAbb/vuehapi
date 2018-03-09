@@ -1,16 +1,19 @@
+@import './variables';
+
 html,
 body {
   font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
 }
 
 input {
   border: none;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid $dark;
   padding-bottom: 1px;
 
   &:focus {
     outline: none;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid $dark;
     padding-bottom: 0;
   }
 
@@ -18,4 +21,41 @@ input {
     cursor: pointer;
     border-bottom: none;
   }
+}
+
+h1, h2, h3, h4, h4, p, li, a, label {
+  line-height: 1.2;
+  font-weight: bold;
+  color: $dark;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+h3, label {
+  font-size: 1.6rem;
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+}
+
+p {
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
+.page-title {
+  font-size: 3rem;
+  text-align: center;
+  margin: 20px auto;
 }

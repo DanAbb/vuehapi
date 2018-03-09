@@ -10,26 +10,24 @@ const privateCert = readFileSync(
 )
 
 export default async function (request, h) {
-  const { email, password, refreshToken } = request.payload
+  const { email, password, refreshToken, user } = request.payload
   const SALT_ROUNDS = 8
+  let isValid = false
 
-  const auth = await Auth.findOne({ email }).populate('user')
+  const auth = email ?
+    await Auth.findOne({ email }).populate('user') :
+    await Auth.findOne({ user }).populate('user')
 
   if (!auth) {
-    return h.response({ message: 'Email not found' }).code(400)
+    return h.response({ message: 'Nay good' }).code(404)
   }
-
-  let isValid = false
 
   if (password) {
     isValid = await bcrypt.compare(password, auth.hashedPassword)
   } else {
-    for (let i = 0; i < auth.refreshTokens.length; i++) {
-      if (await bcrypt.compare(refreshToken, auth.refreshTokens[i])) {
-        isValid = true
-        auth.refreshTokens.splice(i, 1)
-        break;
-      }
+    isValid = await checkRefreshToken(auth.refreshTokens, refreshToken)
+    if (!isValid) {
+      return h.response({ message: 'Invalid token' }).code(403)
     }
   }
 
@@ -43,13 +41,24 @@ export default async function (request, h) {
 
     const authToken = jwt.sign({ user }, privateCert, {
       algorithm: 'RS256',
-      expiresIn: 1800
+      expiresIn: 4000
     })
 
     await auth.save()
 
-    return { user, authToken, refreshToken }
+    return h.response({ user, authToken, refreshToken })
   } else {
     return h.response({ message: 'invalid credentials' }).code(401)
   }
+}
+
+async function checkRefreshToken (authRefresh, refresh) {
+  for (let i = 0; i < authRefresh.length; i++) {
+    if (await bcrypt.compare(refresh, authRefresh[i])) {
+      authRefresh.splice(i, 1)
+      return true
+    }
+  }
+
+  return false
 }

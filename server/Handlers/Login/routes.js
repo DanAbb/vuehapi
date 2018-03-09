@@ -13,9 +13,10 @@ const routes = [
       tags: ['api'],
       validate: {
         payload: {
-          email: Joi.string().email().required(),
+          email: Joi.string().email(),
           password: Joi.string(),
-          refreshToken: Joi.string()
+          refreshToken: Joi.string(),
+          user: Joi.string()
         }
       }
     }

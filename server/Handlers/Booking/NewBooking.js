@@ -1,14 +1,9 @@
 import { Booking, Restaurant } from '../../Models'
-import { readFileSync } from 'fs'
-import jwt from 'jsonwebtoken'
-import path from 'path'
-
-const publicCert = readFileSync(
-  path.resolve(__dirname, '../../public.pem')
-)
 
 export default async function (request, h) {
-  const token = request.headers['authorization'].split(' ').pop()
+  const user = request.auth.credentials
+
+  console.log(user)
 
   const {
     name,
@@ -18,9 +13,9 @@ export default async function (request, h) {
     contact_email } = request.payload
 
   try {
-    const verifiedToken = await jwt.verify(token, publicCert, { algorithms: ['RS256'] })
+    const restaurant = await Restaurant.findOne({ user })
 
-    const restaurant = await Restaurant.findOne({ user: verifiedToken.user })
+    console.log(restaurant)
 
     const booking = new Booking({
       name,

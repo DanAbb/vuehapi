@@ -1,12 +1,13 @@
 import Joi from 'joi'
-import GetRestaurant from './GetRestaurant';
+import GetRestaurants from './GetRestaurants';
 import NewRestaurant from './NewRestaurant';
+import DeleteRestaurant from './DeleteRestaurant';
 
 const routes = [
   {
     method: 'GET',
-    path: '/Restaurant',
-    handler: GetRestaurant,
+    path: '/Restaurants',
+    handler: GetRestaurants,
     config: {
       cors: true,
       tags: ['api']
@@ -28,6 +29,20 @@ const routes = [
           time_open: Joi.string().required(),
           time_closed: Joi.string().required(),
           table_duration: Joi.number().required()
+        }
+      }
+    }
+  },
+  {
+    method: 'DELETE',
+    path: '/Restaurant/Delete',
+    handler: DeleteRestaurant,
+    config: {
+      cors: true,
+      tags: ['api'],
+      validate: {
+        payload: {
+          id: Joi.string().required()
         }
       }
     }

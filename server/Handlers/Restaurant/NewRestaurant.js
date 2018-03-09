@@ -1,14 +1,7 @@
 import { Restaurant } from '../../Models'
-import { readFileSync } from 'fs'
-import jwt from 'jsonwebtoken'
-import path from 'path'
-
-const publicCert = readFileSync(
-  path.resolve(__dirname, '../../public.pem')
-)
 
 export default async function (request, h) {
-  const token = request.headers['authorization'].split(' ').pop()
+  const user = request.auth.credentials
 
   const {
     name,
@@ -20,8 +13,6 @@ export default async function (request, h) {
     table_duration } = request.payload
 
   try {
-    const verifiedToken = await jwt.verify(token, publicCert, { algorithms: ['RS256'] })
-
     const restaurant = new Restaurant({
       name,
       address,
@@ -30,7 +21,7 @@ export default async function (request, h) {
       time_open,
       time_closed,
       table_duration,
-      user: verifiedToken.user._id
+      user: user._id
     })
 
     await restaurant.save()

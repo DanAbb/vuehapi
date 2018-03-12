@@ -1,12 +1,13 @@
 import Joi from 'joi'
-import GetBooking from './GetBooking';
+import GetBookings from './GetBookings';
 import NewBooking from './NewBooking';
+import DeleteBooking from './DeleteBooking';
 
 const routes = [
   {
     method: 'GET',
-    path: '/Booking/:id',
-    handler: GetBooking,
+    path: '/Bookings/{restaurantId}',
+    handler: GetBookings,
     config: {
       cors: true,
       tags: ['api']
@@ -22,11 +23,28 @@ const routes = [
       tags: ['api'],
       validate: {
         payload: {
+          restaurant: Joi.string().required(),
           name: Joi.string().required(),
           time: Joi.string().required(),
+          date: Joi.date().required(),
+          extra: Joi.string(),
           number_of_people: Joi.string().required(),
           contact_number: Joi.number().required(),
           contact_email: Joi.string().email().required()
+        }
+      }
+    }
+  },
+  {
+    method: 'DELETE',
+    path: '/Booking/Delete',
+    handler: DeleteBooking,
+    config: {
+      cors: true,
+      tags: ['api'],
+      validate: {
+        payload: {
+          id: Joi.string().required()
         }
       }
     }

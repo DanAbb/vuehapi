@@ -6,6 +6,8 @@ const Dashboard = (r) => require(['@/components/Dashboard'], r)
 const AllRestaurants = (r) => require(['@/components/restaurants/AllRestaurants'], r)
 const NewRestaurant = (r) => require(['@/components/restaurants/NewRestaurant'], r)
 const Restaurant = (r) => require(['@/components/restaurants/Restaurant'], r)
+const Bookings = (r) => require(['@/components/restaurants/Booking'], r)
+const NewBooking = (r) => require(['@/components/restaurants/NewBooking'], r)
 
 Vue.use(Router)
 
@@ -41,6 +43,18 @@ export default new Router({
           path: '/restaurant/:id',
           name: 'Restaurant',
           component: Restaurant,
+          props: true
+        },
+        {
+          path: '/restaurant/:id/NewBooking',
+          name: 'Bookings',
+          component: Bookings,
+          props: true
+        },
+        {
+          path: '/restaurant/:id/newBooking',
+          name: 'NewBooking',
+          component: NewBooking,
           props: true
         }
       ]

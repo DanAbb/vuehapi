@@ -1,36 +1,29 @@
 import { Booking, Restaurant } from '../../Models'
 
 export default async function (request, h) {
-  const user = request.auth.credentials
-
-  console.log(user)
-
   const {
+    restaurant,
     name,
     time,
+    date,
     number_of_people,
     contact_number,
-    contact_email } = request.payload
+    contact_email,
+    extra
+  } = request.payload
 
-  try {
-    const restaurant = await Restaurant.findOne({ user })
+  const booking = new Booking({
+    restaurant,
+    name,
+    time,
+    date,
+    number_of_people,
+    contact_number,
+    contact_email,
+    extra
+  })
 
-    console.log(restaurant)
+  await booking.save()
 
-    const booking = new Booking({
-      name,
-      time,
-      number_of_people,
-      contact_number,
-      contact_email,
-      restaurant
-    })
-
-    await booking.save()
-
-    return booking
-  } catch (error) {
-    console.log(error)
-    return h.response({ errorMessage: error.message }).code(500)
-  }
+  return booking
 }

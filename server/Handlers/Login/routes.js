@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import ManualLogin from './ManualLogin';
 import VerifyEmail from './VerifyEmail';
+import SignOut from './SignOut';
 
 const routes = [
   {
@@ -34,6 +35,15 @@ const routes = [
           key: Joi.string().required()
         }
       }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/signout',
+    handler: SignOut,
+    config: {
+      cors: true,
+      tags: ['api']
     }
   }
 ];

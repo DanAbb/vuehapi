@@ -2,12 +2,22 @@ import Joi from 'joi'
 import GetRestaurants from './GetRestaurants';
 import NewRestaurant from './NewRestaurant';
 import DeleteRestaurant from './DeleteRestaurant';
+import GetById from './GetById'
 
 const routes = [
   {
     method: 'GET',
     path: '/Restaurants',
     handler: GetRestaurants,
+    config: {
+      cors: true,
+      tags: ['api']
+    }
+  },
+  {
+    method: 'GET',
+    path: '/Restaurant/{restaurantId}',
+    handler: GetById,
     config: {
       cors: true,
       tags: ['api']

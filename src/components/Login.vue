@@ -11,6 +11,9 @@
     <div class="input-container">
       <input type="submit" value="Submit" @click="submit()">
     </div>
+    <div class="sign-up">
+      <p>No Account? <a href="/signup">signup here</a></p>
+    </div>
   </div>
 </template>
 
@@ -34,6 +37,11 @@ export default {
 
       try {
         const login = await api('post', 'Login/ManualLogin', data)
+
+        if (!login) {
+          return
+        }
+
         CookieStorage.setUserId(login.data.user._id)
         CookieStorage.setAuthToken(login.data.authToken)
         CookieStorage.setRefreshToken(login.data.refreshToken)
@@ -63,9 +71,14 @@ export default {
     width: 340px;
 
     input {
-      width: 300px;
+      width: 100%;
       height: 50px;
       font-size: 20px;
     }
+  }
+
+  .sign-up {
+    width: 340px;
+    text-align: right;
   }
 </style>

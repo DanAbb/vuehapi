@@ -19,6 +19,9 @@
     <div class="input-container">
       <input type="submit" value="Submit" @click="submit()">
     </div>
+    <div class="login">
+      <p>Already have an account? <a href="/">login here</a></p>
+    </div>
   </div>
 </template>
 
@@ -72,9 +75,14 @@ export default {
     width: 340px;
 
     input {
-      width: 300px;
+      width: 100%;
       height: 50px;
       font-size: 20px;
     }
+  }
+
+  .login {
+    width: 340px;
+    text-align: right;
   }
 </style>

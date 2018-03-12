@@ -1,5 +1,6 @@
 import axios from 'axios'
 import CookieStorage from './cookie.storage'
+import Vue from '../main'
 
 const host = 'http://localhost:3001'
 
@@ -20,6 +21,12 @@ export async function api (method, endpoint, data = {}) {
       if (error.response.status === 401) {
         const refreshToken = CookieStorage.getRefreshToken()
         const userId = CookieStorage.getUserId()
+
+        if (!refreshToken || !userId) {
+          Vue.$router.push({ name: 'Login' })
+          return false
+        }
+
         const login = await fetchNewToken(refreshToken, userId)
 
         if (!login) {

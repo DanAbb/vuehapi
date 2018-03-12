@@ -66,8 +66,7 @@ export default {
 <style lang="scss" scoped>
   @import '~styles/global.scss';
   .new-restaurant-wrapper {
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,7 +78,7 @@ export default {
     width: 340px;
 
     input {
-      width: 300px;
+      width: 100%;
       height: 50px;
       font-size: 20px;
     }

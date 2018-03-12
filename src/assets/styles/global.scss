@@ -1,9 +1,11 @@
 @import './variables';
+@import './_animations';
 
 html,
 body {
   font-family: 'Montserrat', sans-serif;
   font-size: 10px;
+  background: $background;
 }
 
 input {
@@ -58,4 +60,45 @@ p {
   font-size: 3rem;
   text-align: center;
   margin: 20px auto;
+}
+
+button {
+  height: 50px;
+  min-width: 140px;
+  border-radius: 5px;
+  background: $secondary;
+  color: $lightest;
+  font-size: 1.4rem;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  padding: 0 30px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    animation-name: pulse;
+    animation-duration: .4s;
+    animation-timing-function: ease-in-out;
+  }
+
+  &.warning {
+    background: crimson;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }

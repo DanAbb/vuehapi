@@ -46,13 +46,13 @@ export default new Router({
           props: true
         },
         {
-          path: '/restaurant/:id/NewBooking',
+          path: '/restaurant/:id/Bookings',
           name: 'Bookings',
           component: Bookings,
           props: true
         },
         {
-          path: '/restaurant/:id/newBooking',
+          path: '/restaurant/:id/newbooking',
           name: 'NewBooking',
           component: NewBooking,
           props: true

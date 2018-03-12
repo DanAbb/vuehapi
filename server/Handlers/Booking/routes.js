@@ -27,9 +27,9 @@ const routes = [
           name: Joi.string().required(),
           time: Joi.string().required(),
           date: Joi.date().required(),
-          extra: Joi.string(),
+          extra: Joi.string().allow(''),
           number_of_people: Joi.string().required(),
-          contact_number: Joi.number().required(),
+          contact_number: Joi.string().required(),
           contact_email: Joi.string().email().required()
         }
       }

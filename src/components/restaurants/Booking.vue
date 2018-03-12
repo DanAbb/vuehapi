@@ -3,8 +3,12 @@
   <h1 class="page-title">{{ restaurant.name }} bookings</h1>
   <div class="booking-menu">
     <button @click="addNewBooking">Add new booking</button>
+    <div class="toggle-viewtype" @click="toggleViewtype">
+      <img v-if="viewType === 'list'" :src="img.gridview" alt="List view">
+      <img v-else :src="img.listview" alt="Grid view">
+    </div>
   </div>
-  <div class="bookings-wrapper" v-if="bookings">
+  <div class="bookings-wrapper" v-if="bookings" :class="viewType === 'list' ? 'list' : 'card'">
     <div class="booking" v-for="booking in bookings" :key="booking._id">
       <div class="heading">
         <img :src="img.booking" alt="booking">
@@ -14,12 +18,18 @@
         </div>
       </div>
       <div class="main">
-        <p class="title">Tel</p>
-        <p>{{ booking.contact_number }}</p>
-        <p class="title">Email</p>
-        <p>{{ booking.contact_email }}</p>
-        <p class="title">Extra</p>
-        <p>{{ booking.extra }}</p>
+        <div>
+          <p class="title">Tel</p>
+          <p>{{ booking.contact_number }}</p>
+        </div>
+        <div>
+          <p class="title">Email</p>
+          <p>{{ booking.contact_email }}</p>
+        </div>
+        <div>
+          <p class="title" v-if="booking.extra">Extra</p>
+          <p>{{ booking.extra }}</p>
+        </div>
       </div>
       <div class="booking-actions">
         <button>Contact</button>
@@ -35,6 +45,8 @@ import { mapGetters } from 'vuex'
 import { api } from 'services/api'
 import moment from 'moment'
 import booking from 'img/list.png'
+import listview from 'img/listview.png'
+import gridview from 'img/gridview.png'
 
 export default {
   props: ['id'],
@@ -47,8 +59,11 @@ export default {
       loading: true,
       bookings: null,
       img: {
-        booking
-      }
+        booking,
+        listview,
+        gridview
+      },
+      viewType: 'list'
     }
   },
   computed: {
@@ -97,6 +112,9 @@ export default {
     },
     addNewBooking () {
       this.$router.push({ name: 'NewBooking' })
+    },
+    toggleViewtype () {
+      this.viewType = this.viewType === 'grid' ? 'list' : 'grid'
     }
   }
 }
@@ -181,6 +199,51 @@ export default {
     }
   }
 
+  .list {
+    .booking {
+      width: 100%;
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+    }
+
+    .heading {
+      width: 200px;
+      // align-items: flex-start;
+
+      .info {
+        align-self: center;
+        margin-left: 20px;
+      }
+
+      img {
+        height: 40px;
+        display: none;
+      }
+    }
+
+    .main {
+      width: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex: 1 1 auto;
+      text-align: left;
+
+      > div {
+        margin: 0 10px;
+      }
+    }
+
+    .booking-actions {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: column nowrap;
+    }
+  }
+
   .booking-actions {
     display: flex;
     align-items: center;
@@ -192,6 +255,15 @@ export default {
       margin: 10px;
       padding: 0 10px;
       height: 40px;
+    }
+  }
+
+  .toggle-viewtype {
+    margin: 10px;
+    cursor: pointer;
+
+    img {
+      height: 30px;
     }
   }
 </style>

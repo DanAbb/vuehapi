@@ -1,4 +1,4 @@
-import { Booking, Restaurant } from '../../Models'
+import { Booking } from '../../Models'
 
 export default async function (request, h) {
   const {
@@ -20,7 +20,7 @@ export default async function (request, h) {
     number_of_people,
     contact_number,
     contact_email,
-    extra
+    extra: extra || ''
   })
 
   await booking.save()

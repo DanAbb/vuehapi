@@ -13,12 +13,18 @@
         </div>
       </div>
       <div class="action-button">
-        <button class="primary" @click="newRestaurant">Add restaurant</button>
+        <!-- <button class="primary" @click="newRestaurant">Add restaurant</button> -->
+        <button class="primary" @click="addBooking">Add booking</button>
+        <button class="warning" @click="haltBookings">Halt bookings</button>
       </div>
       <div class="menu-items">
         <div class="item">
           <img :src="img.home" alt="Overview">
           <p>Overview</p>
+        </div>
+        <div class="item" @click="goToCalendar">
+          <img :src="img.calendar" alt="Calendar">
+          <p>Calendar</p>
         </div>
         <div class="item" @click="getRestaurant">
           <img :src="img.dinner" alt="Restaurants">
@@ -44,6 +50,7 @@ import logo from 'img/logo.png'
 import dinner from 'img/dinner.png'
 import home from 'img/home.png'
 import list from 'img/list.png'
+import calendar from 'img/calendar.png'
 import { api } from 'services/api'
 import CookieStorage from 'services/cookie.storage'
 
@@ -54,16 +61,26 @@ export default {
         logo,
         dinner,
         home,
-        list
+        list,
+        calendar
       }
     }
   },
   methods: {
-    async getRestaurant () {
+    getRestaurant () {
       this.$router.push({ name: 'AllRestaurants' })
     },
-    async newRestaurant () {
+    newRestaurant () {
       this.$router.push({ name: 'NewRestaurant' })
+    },
+    addBooking () {
+      this.$router.push({ name: 'NewBooking' })
+    },
+    goToCalendar () {
+      this.$router.push({ name: 'Calendar' })
+    },
+    haltBookings () {
+      console.log('halt bookings')
     },
     async signout () {
       const refreshToken = CookieStorage.getRefreshToken()
@@ -93,6 +110,7 @@ export default {
     padding: 10px;
     box-sizing: border-box;
     color: $lightest;
+    overflow-y: scroll;
 
     h1 {
       color: $lightest;
@@ -145,10 +163,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-flow: row wrap;
     margin: 50px auto;
 
     button {
-      margin: 0 auto;
+      margin: 10px auto;
     }
   }
 
@@ -189,6 +208,7 @@ export default {
     margin-left: 20px;
     box-sizing: border-box;
     cursor: pointer;
+    margin-top: 50px;
 
     h4 {
       color: $lightest;

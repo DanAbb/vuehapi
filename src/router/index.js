@@ -8,6 +8,7 @@ const NewRestaurant = (r) => require(['@/components/restaurants/NewRestaurant'],
 const Restaurant = (r) => require(['@/components/restaurants/Restaurant'], r)
 const Bookings = (r) => require(['@/components/restaurants/Booking'], r)
 const NewBooking = (r) => require(['@/components/restaurants/NewBooking'], r)
+const Calendar = (r) => require(['@/components/Calendar'], r)
 
 Vue.use(Router)
 
@@ -56,6 +57,11 @@ export default new Router({
           name: 'NewBooking',
           component: NewBooking,
           props: true
+        },
+        {
+          path: '/calendar',
+          name: 'Calendar',
+          component: Calendar
         }
       ]
     }

@@ -141,6 +141,7 @@ export default {
     justify-content: center;
     flex-flow: row wrap;
     margin-top: 20px;
+    display: none;
   }
 
   .picture {

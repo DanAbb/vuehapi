@@ -1,14 +1,12 @@
 <template>
   <div class="calendar-wrapper">
-    <div class="pagination">
+    <div class="header">
       <div class="backward" @click.prevent="buildCalendar('backward')">
-        <h1>Back</h1>
+        <img :src="img.leftArrow" alt="arrow">
       </div>
       <div class="forward" @click.prevent="buildCalendar('forward')">
-        <h1>Forward</h1>
+        <img :src="img.rightArrow" alt="arrow">
       </div>
-    </div>
-    <div class="header">
       <h1>{{ formattedMonth }}</h1>
     </div>
     <div class="weekday">
@@ -18,7 +16,7 @@
     </div>
     <div class="calendar">
       <div class="calendar-row" v-for="x in 6" :key="x">
-        <div class="calendar-cell" v-for="x in 7" :key="x">
+        <div class="calendar-cell" v-for="x in 7" :key="x" @click.self="goToDate($event)">
           <p class="date"></p>
           <div class="bookings"></div>
         </div>
@@ -30,6 +28,9 @@
 <script>
 import moment from 'moment'
 
+import leftArrow from 'img/left-arrow.png'
+import rightArrow from 'img/right-arrow.png'
+
 export default {
   created () {
   },
@@ -38,14 +39,18 @@ export default {
   },
   data () {
     return {
+      img: {
+        leftArrow,
+        rightArrow
+      },
       days: [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat',
+        'Sun'
       ],
       month: moment(),
       formattedMonth: moment().format('MMMM YYYY')
@@ -71,18 +76,21 @@ export default {
         cell.classList.remove('disabled')
         cell.classList.remove('today')
         cell.querySelector('.date').innerHTML = ''
+        cell.setAttribute('data-date', '')
       }
 
       for (const cell of cells) {
-        if (count < monthStartDay) {
-          cell.classList.add('disabled')
-        } else if (count >= (daysInMonth + monthStartDay)) {
+        if (count < monthStartDay || count >= (daysInMonth + monthStartDay)) {
           cell.classList.add('disabled')
         } else if ((count - monthStartDay + 1) === moment().get('date') && this.month.get('month') === moment().get('month')) {
           cell.querySelector('.date').innerHTML = count - monthStartDay + 1
+          const today = moment().year(this.month.get('year')).month(this.month.get('month')).date(count - monthStartDay + 1)
+          cell.setAttribute('data-date', today.format('DD/MM/YYYY'))
           cell.classList.add('today')
         } else {
           cell.querySelector('.date').innerHTML = count - monthStartDay + 1
+          const today = moment().year(this.month.get('year')).month(this.month.get('month')).date(count - monthStartDay + 1)
+          cell.setAttribute('data-date', today.format('DD/MM/YYYY'))
         }
         count++
       }
@@ -103,6 +111,19 @@ export default {
     getPreviousMonth () {
       this.month = this.month.subtract(1, 'months')
       return this.month.get('month')
+    },
+    goToDate (ev) {
+      if (ev.target.classList.contains('disabled')) return
+      const date = ev.target.getAttribute('data-date')
+      const dateArr = date.split('/')
+      this.$router.push({
+        name: 'EventDate',
+        params: {
+          day: dateArr[0],
+          month: dateArr[1],
+          year: dateArr[2]
+        }
+      })
     }
   }
 }
@@ -112,15 +133,20 @@ export default {
   @import '~styles/global.scss';
 
   .calendar-wrapper {
+    margin: -50px -50px -50px;
   }
 
   .weekday {
     display: flex;
+    border-top: 1px solid $grey;
+    padding: 5px 0 0;
+    background: #fff;
   }
 
   .weekday-cell {
     width: 150px;
     margin-bottom: 5px;
+    padding-left: 5px;
   }
 
   .calendar {
@@ -129,41 +155,81 @@ export default {
 
   .calendar-row {
     display: flex;
+    border-bottom: 1px solid $grey;
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 
   .calendar-cell {
-    height: 100px;
+    height: 120px;
     width: 150px;
-    border: 1px solid $grey;
     background: #fff;
     box-sizing: border-box;
+    cursor: pointer;
+    border-right: 1px solid $grey;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      background: lighten($color: $grey, $amount: 15%);
+    }
 
     &.disabled {
-      background: $lightest;
+      background: lighten($color: $lightest, $amount: 7%);
+      cursor: inherit;
+
+      &:hover {
+      }
     }
 
     &.today {
-      border: 2px solid $secondary;
+      .date {
+        background: $secondary;
+        width: auto;
+        color: #fff;
+      }
     }
 
     .date {
-      padding: 2px;
-    }
-  }
-
-  .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    > div {
-      cursor: pointer;
-      margin: auto 20px;
-      user-select: none;
+      padding: 5px;
+      position: absolute;
+      border-radius: 50px;
+      margin: 2px;
     }
   }
 
   .header {
-    margin-bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    box-sizing: border-box;
+
+    h1 {
+      margin-left: 40px;
+    }
+
+    .backward,
+    .forward {
+      cursor: pointer;
+      margin: auto 20px;
+      user-select: none;
+
+      img {
+        height: 50px;
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
   }
 </style>

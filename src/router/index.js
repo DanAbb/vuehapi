@@ -9,6 +9,7 @@ const Restaurant = (r) => require(['@/components/restaurants/Restaurant'], r)
 const Bookings = (r) => require(['@/components/restaurants/Booking'], r)
 const NewBooking = (r) => require(['@/components/restaurants/NewBooking'], r)
 const Calendar = (r) => require(['@/components/Calendar'], r)
+const EventDate = (r) => require(['@/components/Date'], r)
 
 Vue.use(Router)
 
@@ -62,6 +63,12 @@ export default new Router({
           path: '/calendar',
           name: 'Calendar',
           component: Calendar
+        },
+        {
+          path: '/calendar/:day/:month/:year',
+          name: 'EventDate',
+          component: EventDate,
+          props: true
         }
       ]
     }
